@@ -1,4 +1,15 @@
-node_modules/
-.yarn/
-docs/
+# dependencies
+node_modules
+.pnp
+.pnp.js
+
+# docs
+docs
+
+# config
 .env
+.yarn
+.vscode
+
+# production
+build

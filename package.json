@@ -1,26 +1,26 @@
 {
-  "name": "creeid",
-  "version": "1.0.0",
-  "description": "A CREative + E + IDea board with an extra E for Excellence",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DeeshanSharma/creeid.git"
-  },
-  "author": "Deeshan Sharma <deeshansharma04@gmail.com>",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/DeeshanSharma/creeid/issues"
-  },
-  "homepage": "https://github.com/DeeshanSharma/creeid#readme",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "mongoose": "^5.12.11"
-  }
+	"name": "creeid",
+	"version": "1.0.0",
+	"description": "A CREative + E + IDea board with an extra E for Excellence",
+	"main": "server.js",
+	"scripts": {
+		"client": "cd client && yarn start",
+		"server": "nodemon server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/DeeshanSharma/creeid.git"
+	},
+	"author": "Deeshan Sharma <deeshansharma04@gmail.com>",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/DeeshanSharma/creeid/issues"
+	},
+	"homepage": "https://github.com/DeeshanSharma/creeid#readme",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1",
+		"mongoose": "^5.12.11"
+	}
 }

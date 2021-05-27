@@ -15,8 +15,11 @@ router.get("/test", (req, res) => res.send("API is working good keep it up"));
 // access public
 router.get("/ideas", (req, res) => {
 	Idea.find((err, ideas) => {
-		if (err) res.status(404).json({ nothingFound: "I'm empty come on feed me some Ideas" });
-		else res.json(ideas);
+		if (err) res.status(400).json({ error: "We messed up SHIT..! Do it again" });
+		else {
+			if (ideas.length === 0) res.status(404).json({ nothingFound: "I'm empty come on feed me some Ideas" });
+			else res.json(ideas);
+		}
 	});
 });
 
@@ -25,8 +28,11 @@ router.get("/ideas", (req, res) => {
 // access public
 router.get("/ideas/:id", (req, res) => {
 	Idea.findById(req.params.id, (err, idea) => {
-		if (err) res.status(404).json({ nothingFound: "Oops..! Something is wrong I didn't got anything" });
-		else res.json(idea);
+		if (err) res.status(400).json({ error: "We messed up SHIT..! Do it again" });
+		else {
+			if (idea.length === 0) res.status(404).json({ nothingFound: "Oops..! Something is wrong I didn't got anything" });
+			else res.json(idea);
+		}
 	});
 });
 

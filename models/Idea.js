@@ -12,9 +12,14 @@ const ideaSchema = new mongoose.Schema({
 	description: {
 		type: String,
 	},
-	thread: {
-		type: String,
-	},
+	thread: [
+		{
+			text: {
+				type: String,
+				default: "",
+			},
+		},
+	],
 });
 
 const Idea = mongoose.model("Idea", ideaSchema);

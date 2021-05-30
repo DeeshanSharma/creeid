@@ -22,6 +22,7 @@ function Idea(props) {
 						</div>
 					);
 				})}
+			<Link to={`/ideas/${props.idea._id}/thread/new`}>New Thread</Link>
 			<Link to={`/update/${props.idea._id}`}>Update</Link>
 			<button onClick={() => onDelete(props.idea._id)}>Delete</button>
 		</>

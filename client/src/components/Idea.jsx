@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Idea(props) {
 	return (
@@ -14,6 +15,7 @@ function Idea(props) {
 						</div>
 					);
 				})}
+			<Link to={`/update/${props.idea._id}`}>Update</Link>
 		</>
 	);
 }

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import ColorModeSwitcher from "./ColorModeSwitcher";
 import Home from "./Home";
 import NewIdea from "./NewIdea";
+import UpdateIdea from "./UpdateIdea";
 
 function App() {
 	return (
@@ -13,6 +14,7 @@ function App() {
 				<Switch>
 					<Route exact path="/" component={Home} />
 					<Route path="/new" component={NewIdea} />
+					<Route path="/update/:id" component={UpdateIdea} />
 				</Switch>
 			</Router>
 		// </ChakraProvider>

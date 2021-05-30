@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Thread from "./Thread";
 
 function Idea(props) {
 	function onDelete(id) {
@@ -16,11 +17,7 @@ function Idea(props) {
 			<p>{props.idea.description}</p>
 			{props.idea.thread.length !== 0 &&
 				props.idea.thread.map((thread) => {
-					return (
-						<div key={thread._id}>
-							<p>{thread.text}</p>
-						</div>
-					);
+					return <Thread key={thread._id} thread={thread} ideaId={props.idea._id} />;
 				})}
 			<Link to={`/ideas/${props.idea._id}/thread/new`}>New Thread</Link>
 			<Link to={`/update/${props.idea._id}`}>Update</Link>

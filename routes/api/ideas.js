@@ -51,8 +51,18 @@ router.post("/new", (req, res) => {
 // access public
 router.patch("/ideas/:id/thread/new", (req, res) => {
 	Idea.findByIdAndUpdate(req.params.id, { $push: { thread: req.body } }, (err) => {
-		if (err) res.status(400).json({ notCreated: "I'm afraid, I failed really sorry do it again " });
+		if (err) res.status(400).json({ notCreated: "I'm afraid, I failed really sorry do it again" });
 		else res.json({ created: "Yeah..! I got it" });
+	});
+});
+
+// @route PATCH api/ideas/:id/thead/delete/:threadId
+// description: to delete a thread
+// access public
+router.patch("/ideas/:id/thread/delete/:threadId", (req, res) => {
+	Idea.findByIdAndUpdate(req.params.id, { $pull: { thread: { _id: req.params.threadId } } }, (err) => {
+		if (err) res.status(400).json({ notDeleted: "I was busy somewhere else, so do it again" });
+		else res.json({ deleted: "Ok, Done..!" });
 	});
 });
 

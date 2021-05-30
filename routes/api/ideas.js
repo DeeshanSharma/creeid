@@ -46,10 +46,20 @@ router.post("/new", (req, res) => {
 	});
 });
 
+// @route PATCH api/ideas/:id/thead
+// description: to create new thread
+// access public
+router.patch("/ideas/:id/thread/new", (req, res) => {
+	Idea.findByIdAndUpdate(req.params.id, { $push: { thread: req.body } }, (err) => {
+		if (err) res.status(400).json({ notCreated: "I'm afraid, I failed really sorry do it again " });
+		else res.json({ created: "Yeah..! I got it" });
+	});
+});
+
 // @route PATCH api/update/:id
 // description: to update an idea
 // access public
-router.patch("/update/:id", (req, res, next) => {
+router.patch("/update/:id", (req, res) => {
 	Idea.findByIdAndUpdate(req.params.id, req.body, (err) => {
 		if (err) res.status(400).json({ notUpdated: "Aghh..! I messed up boss, couldn't update this one" });
 		else res.json({ updated: "OK so we need to update this, COOL, I'll handle it boss, don't worry" });

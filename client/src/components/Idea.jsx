@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function Idea(props) {
+	function onDelete(id) {
+		axios
+			.delete(`/api/delete/${id}`)
+			.then((res) => console.log(res.data.deleted))
+			.catch((err) => console.log(err.response.data.notDeleted));
+	}
 	return (
 		<>
 			<h1>{props.idea.title}</h1>
@@ -16,6 +23,7 @@ function Idea(props) {
 					);
 				})}
 			<Link to={`/update/${props.idea._id}`}>Update</Link>
+			<button onClick={() => onDelete(props.idea._id)}>Delete</button>
 		</>
 	);
 }

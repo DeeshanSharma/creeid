@@ -7,7 +7,10 @@ function Idea(props) {
 	function onDelete(id) {
 		axios
 			.delete(`/api/delete/${id}`)
-			.then((res) => console.log(res.data.deleted))
+			.then((res) => {
+				console.log(res.data.deleted);
+				window.location.reload(true);
+			})
 			.catch((err) => console.log(err.response.data.notDeleted));
 	}
 	return (

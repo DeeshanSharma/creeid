@@ -5,8 +5,10 @@ function Thread(props) {
 	function onDelete(id) {
 		axios
 			.patch(`/api/ideas/${props.ideaId}/thread/delete/${id}`)
-			.then((res) => console.log(res.data.deleted)
-			)
+			.then((res) => {
+				console.log(res.data.deleted);
+				window.location.reload(true);
+			})
 			.catch((err) => console.log(err.response.data.notDeleted));
 	}
 

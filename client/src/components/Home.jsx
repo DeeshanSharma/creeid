@@ -13,13 +13,13 @@ function Home() {
 			.then((res) => setIdeas(res.data))
 			.catch((err) => {
 				if (axios.isCancel(err)) return;
-				console.log(err.response.data.error);
+				console.log(err.response.data.nothingFound);
 			});
 
 		return () => {
 			source.cancel();
 		};
-	}, [ideas]);
+	}, []);
 
 	return (
 		<>

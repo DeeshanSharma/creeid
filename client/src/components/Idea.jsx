@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import Thread from "./Thread";
+import NewThread from "./NewThread";
 
 function Idea(props) {
 	const [idea, setIdea] = useState(props.idea);
 	const [toggleEdit, setToggleEdit] = useState(false);
+	const [addThread, setAddThread] = useState(false);
 
 	function onChange(event) {
 		const { name, value } = event.target;
@@ -40,6 +41,14 @@ function Idea(props) {
 			.catch((err) => console.log(err.response.data.notDeleted));
 	}
 
+	function exitEdit(event, exitHandleFunction) {
+		if (event.key === "Escape") {
+			exitHandleFunction(false);
+			event.preventDefault();
+			event.stopPropagation();
+		}
+	}
+
 	return (
 		<>
 			{!toggleEdit ? (
@@ -47,24 +56,9 @@ function Idea(props) {
 					<h1>{idea.title}</h1>
 					<span>{new Date(idea.date).toLocaleString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</span>
 					<p>{idea.description}</p>
-					{idea.thread.length !== 0 &&
-						idea.thread.map((thread) => {
-							return <Thread key={thread._id} thread={thread} ideaId={idea._id} />;
-						})}
-					<Link to={`/ideas/${idea._id}/thread/new`}>New Thread</Link>
-					<button onClick={() => onDelete(idea._id)}>Delete</button>
 				</div>
 			) : (
-				<form
-					autoComplete="off"
-					onSubmit={(event) => onSubmit(event)}
-					onKeyDown={(event) => {
-						if (event.key === "Escape") {
-							setToggleEdit(false);
-							event.preventDefault();
-							event.stopPropagation();
-						}
-					}}>
+				<form autoComplete="off" onSubmit={(event) => onSubmit(event, setToggleEdit)} onKeyDown={(event) => exitEdit(event, setToggleEdit)}>
 					<label htmlFor="title">Title:</label>
 					<input type="text" autoFocus={true} name="title" value={idea.title} onChange={(event) => onChange(event)} />
 					<label htmlFor="description">Description:</label>
@@ -72,6 +66,12 @@ function Idea(props) {
 					<button type="submit">Update</button>
 				</form>
 			)}
+			{idea.thread.length !== 0 &&
+				idea.thread.map((thread, index) => {
+					return <Thread key={index} thread={thread} ideaId={idea._id} />;
+				})}
+			{!addThread ? <button onClick={() => setAddThread(true)}>New Thread</button> : <NewThread ideaId={idea._id} exitEdit={exitEdit} setAddThread={setAddThread} />}
+			<button onClick={() => onDelete(idea._id)}>Delete</button>
 		</>
 	);
 }

@@ -1,28 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 
 function UpdateIdea(props) {
-	const ideaStructure = {
-		title: "",
-		date: "",
-		description: "",
-		thread: [],
-	};
-
-	const [idea, setIdea] = useState(ideaStructure);
-
-	useEffect(() => {
-		axios
-			.get(`/api/ideas/${props.match.params.id}`)
-			.then((res) => setIdea(res.data))
-			.catch((err) => console.log(err.response.data.nothingFound));
-		return () => {};
-	}, [props]);
+	const idea = props.idea;
 
 	function onChange(event) {
 		const { name, value } = event.target;
 
-		setIdea((prevValues) => {
+		props.setIdea((prevValues) => {
 			return {
 				...prevValues,
 				[name]: value,
@@ -32,30 +17,25 @@ function UpdateIdea(props) {
 
 	function onSubmit(event) {
 		event.preventDefault();
-		const newIdea = {
-			title: idea.title,
-			description: idea.description,
-		};
+		props.setToggleEdit(false);
 
 		axios
-			.patch(`/api/update/${props.match.params.id}`, newIdea)
+			.patch(`/api/update/${idea._id}`, idea)
 			.then((res) => {
 				console.log(res.data.updated);
-				props.history.push("/");
+				window.location.reload(true);
 			})
 			.catch((err) => console.log(err));
 	}
 
 	return (
-		<>
-			<form onSubmit={(event) => onSubmit(event)}>
-				<label htmlFor="title">Title:</label>
-				<input type="text" name="title" value={idea.title} onChange={(event) => onChange(event)} />
-				<label htmlFor="description">Description:</label>
-				<textarea name="description" rows="5" cols="50" value={idea.description} onChange={(event) => onChange(event)} />
-				<button type="submit">Update</button>
-			</form>
-		</>
+		<form autoComplete="off" onSubmit={(event) => onSubmit(event)} onKeyDown={(event) => props.exitEdit(event, props.setToggleEdit)}>
+			<label htmlFor="title">Title:</label>
+			<input type="text" autoFocus={true} name="title" value={idea.title} onChange={(event) => onChange(event)} />
+			<label htmlFor="description">Description:</label>
+			<textarea name="description" rows="5" cols="50" value={idea.description} onChange={(event) => onChange(event)} />
+			<button type="submit">Update</button>
+		</form>
 	);
 }
 

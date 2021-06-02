@@ -1,9 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
+import UpdateIdea from "./UpdateIdea";
 import Thread from "./Thread";
+import NewThread from "./NewThread";
 
 function Idea(props) {
+	const [idea, setIdea] = useState(props.idea);
+	const [toggleEdit, setToggleEdit] = useState(false);
+	const [addThread, setAddThread] = useState(false);
+
 	function onDelete(id) {
 		axios
 			.delete(`/api/delete/${id}`)
@@ -13,18 +18,33 @@ function Idea(props) {
 			})
 			.catch((err) => console.log(err.response.data.notDeleted));
 	}
+
+	function exitEdit(event, exitHandleFunction) {
+		if (event.key === "Escape") {
+			exitHandleFunction(false);
+			event.preventDefault();
+			event.stopPropagation();
+			window.location.reload(true);
+		}
+	}
+
 	return (
 		<>
-			<h1>{props.idea.title}</h1>
-			<span>{new Date(props.idea.date).toLocaleString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</span>
-			<p>{props.idea.description}</p>
-			{props.idea.thread.length !== 0 &&
-				props.idea.thread.map((thread) => {
-					return <Thread key={thread._id} thread={thread} ideaId={props.idea._id} />;
+			{!toggleEdit ? (
+				<div onDoubleClick={() => setToggleEdit(true)}>
+					<h1>{idea.title}</h1>
+					<span>{new Date(idea.date).toLocaleString("en-US", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}</span>
+					<p>{idea.description}</p>
+				</div>
+			) : (
+				<UpdateIdea idea={idea} setIdea={setIdea} exitEdit={exitEdit} setToggleEdit={setToggleEdit} />
+			)}
+			{idea.thread.length !== 0 &&
+				idea.thread.map((thread, index) => {
+					return <Thread key={index} thread={thread} ideaId={idea._id} />;
 				})}
-			<Link to={`/ideas/${props.idea._id}/thread/new`}>New Thread</Link>
-			<Link to={`/update/${props.idea._id}`}>Update</Link>
-			<button onClick={() => onDelete(props.idea._id)}>Delete</button>
+			{!addThread ? <button onClick={() => setAddThread(true)}>New Thread</button> : <NewThread ideaId={idea._id} exitEdit={exitEdit} setAddThread={setAddThread} />}
+			<button onClick={() => onDelete(idea._id)}>Delete</button>
 		</>
 	);
 }

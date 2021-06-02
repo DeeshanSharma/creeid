@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 
 function NewThread(props) {
 	const threadStructure = {
@@ -24,24 +23,21 @@ function NewThread(props) {
 		};
 
 		axios
-			.patch(`/api/ideas/${props.match.params.id}/thread/new`, newThread)
+			.patch(`/api/ideas/${props.ideaId}/thread/new`, newThread)
 			.then((res) => {
 				console.log(res.data.created);
 				setThread(threadStructure);
-				props.history.push("/");
+				window.location.reload(true);
 			})
 			.catch((err) => console.log(err.response.data.notCreated));
 	}
 
 	return (
-		<>
-			<form autoComplete="off" onSubmit={(event) => onSubmit(event)}>
-				<label htmlFor="text">Text: </label>
-				<input type="text" name="text" value={thread.text} onChange={(event) => onChange(event)} />
-				<button type="submit">Submit</button>
-			</form>
-			<Link to="/">Go Back</Link>
-		</>
+		<form autoComplete="off" onSubmit={(event) => onSubmit(event)} onKeyDown={(event) => props.exitEdit(event, props.setAddThread)}>
+			<label htmlFor="text">Text: </label>
+			<input type="text" autoFocus={true} name="text" value={thread.text} onChange={(event) => onChange(event)} />
+			<button type="submit">Add</button>
+		</form>
 	);
 }
 

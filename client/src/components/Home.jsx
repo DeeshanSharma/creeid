@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import Idea from "./Idea";
+import NewIdea from "./NewIdea";
 
 function Home() {
 	const [ideas, setIdeas] = useState([]);
+	const [newIdea, setNewIdea] = useState(false);
 
 	useEffect(() => {
 		const source = axios.CancelToken.source();
@@ -24,7 +25,7 @@ function Home() {
 	return (
 		<>
 			<h1>All Ideas</h1>
-			<Link to="/new">New Idea</Link>
+			{!newIdea ? <button onClick={() => setNewIdea(true)}>Got New Idea</button> : <NewIdea setNewIdea={setNewIdea} />}
 			{ideas.map((idea) => {
 				return <Idea key={idea._id} idea={idea} />;
 			})}

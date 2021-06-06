@@ -1,22 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import UpdateIdea from "./UpdateIdea";
-import Thread from "./Thread";
-import NewThread from "./NewThread";
+import { AlertContext } from "./Home";
 
 function Idea(props) {
 	const [idea, setIdea] = useState(props.idea);
 	const [toggleEdit, setToggleEdit] = useState(false);
-	const [addThread, setAddThread] = useState(false);
+	const { setAlertMsg, setUpdate } = useContext(AlertContext);
 
 	function onDelete(id) {
 		axios
 			.delete(`/api/delete/${id}`)
 			.then((res) => {
-				console.log(res.data.deleted);
-				window.location.reload(true);
+				setAlertMsg(res.data.deleted);
+				setUpdate((prev) => !prev);
 			})
-			.catch((err) => console.log(err.response.data.notDeleted));
+			.catch((err) => {
+				if (err.response.status === 400) {
+					setAlertMsg(err.response.data.notDeleted);
+					return;
+				}
+				console.log(err);
+			});
 	}
 
 	function exitEdit(event, exitHandleFunction) {
@@ -24,7 +29,6 @@ function Idea(props) {
 			exitHandleFunction(false);
 			event.preventDefault();
 			event.stopPropagation();
-			window.location.reload(true);
 		}
 	}
 
@@ -39,11 +43,6 @@ function Idea(props) {
 			) : (
 				<UpdateIdea idea={idea} setIdea={setIdea} exitEdit={exitEdit} setToggleEdit={setToggleEdit} />
 			)}
-			{idea.thread.length !== 0 &&
-				idea.thread.map((thread, index) => {
-					return <Thread key={index} thread={thread} ideaId={idea._id} />;
-				})}
-			{!addThread ? <button onClick={() => setAddThread(true)}>New Thread</button> : <NewThread ideaId={idea._id} exitEdit={exitEdit} setAddThread={setAddThread} />}
 			<button onClick={() => onDelete(idea._id)}>Delete</button>
 		</>
 	);
